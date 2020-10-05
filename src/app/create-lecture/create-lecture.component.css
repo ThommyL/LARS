@@ -1,0 +1,51 @@
+@media screen and (max-width: 550px) {
+    .drop-list {
+        max-width: 90%;
+    }
+
+    .left-button {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .middle-button {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .right-button {
+        display: block;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: rgba(230, 74, 25, 1);
+        color: white;
+        border: none;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+@media screen and (min-width: 550px) {
+    .left-button {
+        display: inline-block;
+    }
+
+    .middle-button {
+        left: 45%;
+        position: absolute;
+        display: inline-block;
+    }
+
+    .right-button {
+        display: inline-block;
+        position: absolute;
+        right: 15px;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: rgba(230, 74, 25, 1);
+        color: white;
+        border: none;
+    }
+}

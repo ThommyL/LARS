@@ -1,0 +1,198 @@
+<div style="max-width: 1100px; margin: 150px auto auto; z-index: 16777269" *ngIf="dataInitialized">
+    <div *ngIf="lectureService.loadLectureCode">
+        <div style="max-width: 1100px; margin: auto">
+            <mat-card>
+                <h1>{{this.text.welcome_to_your_lecture}}</h1>
+                <div *ngIf = "studentsInLecture === 1">
+                    <p>{{text.students_in_lecture_1_singular}} {{studentsInLecture}} {{text.students_in_lecture_2_singular}}</p>
+                </div>
+                <div *ngIf = "studentsInLecture > 1 || studentsInLecture === 0">
+                    <p>{{text.students_in_lecture_1_plural}} {{studentsInLecture}} {{text.students_in_lecture_2_plural}}</p>
+                </div>
+                <p>{{text.no_need_to_reload}}</p>
+            </mat-card>
+        </div>
+
+        <div *ngIf="answeredAmount">
+            <div *ngIf="getUnderstandingBackgroundColor() === 0; then goodUnderstanding"></div>
+            <div *ngIf="getUnderstandingBackgroundColor() === 1; then okUnderstanding"></div>
+            <div *ngIf="getUnderstandingBackgroundColor() === 2; then notSoGoodUnderstanding"></div>
+        </div>
+
+        <div *ngIf="!answeredAmount" style="max-width: 1100px; margin: auto">
+            <mat-card>
+                <p>{{text.no_understanding_answers_yet}}</p>
+            </mat-card>
+        </div>
+
+        <ng-template #goodUnderstanding>
+            <mat-card style="background-color: rgba(215, 204, 200, 1);">
+                <div [ngTemplateOutlet]="currentUnderstandingGraph"></div>
+            </mat-card>
+        </ng-template>
+
+        <ng-template #okUnderstanding>
+            <mat-card style="background-color: rgba(255,245,157 ,1);">
+                <div [ngTemplateOutlet]="currentUnderstandingGraph"></div>
+            </mat-card>
+        </ng-template>
+
+        <ng-template #notSoGoodUnderstanding>
+            <mat-card style="background-color: rgba(255,204,128 ,1);">
+                <div [ngTemplateOutlet]="currentUnderstandingGraph"></div>
+            </mat-card>
+        </ng-template>
+
+        <ng-template #currentUnderstandingGraph>
+            <h2>{{this.text.your_students_current_understanding}}:</h2>
+
+            <div style="display: block" *ngIf="asked && understandingDataAvailable">
+                <canvas baseChart
+                        [data]="currentUnderstanding"
+                        [labels]="['3', '2', '1', '0', '-1', '-2', '-3']"
+                        [legend]="true"
+                        [chartType]="'doughnut'"
+                        [colors]="sevenColors">
+                </canvas>
+                <div *ngIf="answeredAmount === 1">
+                    <p>{{answeredAmount}} {{this.text.answered_so_far_singular}}</p>
+                </div>
+                <div *ngIf="answeredAmount > 1 || answeredAmount === 0">
+                    <p>{{answeredAmount}} {{this.text.answered_so_far_plural}}</p>
+                </div>
+            </div>
+        </ng-template>
+
+        <div style="max-width: 1100px; margin: auto">
+            <div *ngIf="!lecture.settings.continuousRating" style="margin-bottom: 20px">
+                <mat-card>
+                    <button (click)="askUnderstanding()">{{text.ask_understanding_button}}</button>
+                    <p>{{text.prompts_students_to_rate_their_understanding}}</p>
+                </mat-card>
+            </div>
+            <mat-card>
+                <div *ngIf="lecture.settings.continuousRating">
+                    <button (click)="resetCurrentUnderstandingGraph()"
+                            style="display: inline-block; margin-right: 15px; margin-bottom: 15px">{{text.reset_current_understanding_graph}}</button>
+                </div>
+                <button (click)="openLectureSettingsDialog()" style="margin-right: 15px"><i
+                        class="material-icons">settings</i> {{text.open_settings}}
+                </button>
+            </mat-card>
+
+            <mat-card>
+                {{this.text.explanation}}
+                <p></p>
+                <button (click)="cgdMap.expandAll = true"
+                        style="margin-right: 15px">{{text.open_all_available_button}}</button>
+                <button (click)="cgdMap.expandAll = false">{{text.close_all_button}}</button>
+                <mat-slide-toggle [(ngModel)]="cgdMap.percentageView"
+                                  style="padding-left: 15px; padding-top: 15px; margin: auto">{{text.absolute_percent_toggle}}</mat-slide-toggle>
+
+            </mat-card>
+            <mat-card>
+                <mat-tab-group (selectedTabChange)="onChangeTab($event)">
+                    <div *ngFor="let i of cgdMap.getKeyArray()">
+                        <mat-tab [label]="cgdMap.chapterData[i].chapter.title">
+                            <div *ngIf="containsUnaskedQuestion(i)">
+                                <button (click)="askAllQuestionsInChapter()"
+                                        style="margin-left: 15px; margin-top: 15px; margin-bottom: 15px">{{text.ask_all_questions_in_current_chapter}}</button>
+                            </div>
+
+                            <mat-accordion multi=true>
+                                <div *ngFor="let pair of cgdMap.chapterData[i].pairs">
+                                    <mat-expansion-panel [expanded]="pair.expand">
+                                        <mat-expansion-panel-header style="min-height: 70px!important;">
+                                            <mat-panel-title class="question-title">
+                                                <div *ngIf="!pair.question.wasAsked">
+                                                    <mat-checkbox [(ngModel)]="pair.question.isSelected"
+                                                                  [disabled]="pair.question.wasAsked"
+                                                                  (change)="qsm.toggleQuestionSelection(pair.question)"
+                                                                  (click)="$event.stopPropagation();">
+                                                    </mat-checkbox>
+                                                </div>
+                                                &nbsp;&nbsp;{{pair.question.questionTitle}}
+                                            </mat-panel-title>
+
+                                            <table style="width: 80%">
+                                                <tr>
+                                                    <div class="do-not-show-on-mobile">
+                                                        <td class="question-description-text">
+                                                            {{pair.question.questionText}}
+                                                        </td>
+                                                    </div>
+
+                                                    <td class="question-description-type">
+                                                        {{questionTypes[pair.question.questionType]}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </mat-expansion-panel-header>
+
+                                        <div class="do-not-show-on-pc">
+                                            <mat-panel-description>
+                                                {{pair.question.questionText}}
+                                            </mat-panel-description>
+                                        </div>
+
+                                        <!-- Insert corresponding template -->
+                                        <div *ngIf="pair.graphData.createChart; then Chart; else TextOptions"></div>
+
+                                        <ng-template #Chart>
+                                            <div style="display: block">
+                                                <!--suppress AngularInvalidExpressionResultType -->
+                                                <canvas baseChart
+                                                        [data]="pair.graphData.data"
+                                                        [labels]="pair.graphData.label"
+                                                        [legend]="pair.graphData.displayLabel"
+                                                        [chartType]="pair.graphData.type"
+                                                        [options]="pair.graphData.options"
+                                                        [colors]="pair.graphData.colors"></canvas>
+                                            </div>
+
+                                            <p>{{pair.graphData.sum}} {{text.answered_so_far_plural}}</p>
+
+                                            <div *ngIf="pair.graphData.percentageView">
+                                                <b>{{text.displaying_percentage}}</b>
+                                            </div>
+                                            <div *ngIf="!pair.graphData.percentageView">
+                                                <b>{{text.displaying_absolute}}</b>
+                                            </div>
+                                        </ng-template>
+
+
+                                        <ng-template #TextOptions>
+                                            <div class="table"
+                                                 style="min-height: 0; max-height: 350px; overflow-y: scroll; overflow-x: hidden"
+                                                 *ngIf="pair.graphData.data; else NoTextoptionsAnswer">
+                                                <div class="row" *ngFor="let answer of pair.graphData.data"
+                                                     style="display: block">
+                                                    <mat-card style="word-break: break-word;">
+                                                        <span>{{answer}}</span>
+                                                    </mat-card>
+                                                </div>
+                                            </div>
+
+                                            <ng-template #NoTextoptionsAnswer>
+                                                <p>{{text.no_answer_yet}}</p>
+                                            </ng-template>
+                                        </ng-template>
+
+                                    </mat-expansion-panel>
+                                </div>
+                            </mat-accordion>
+                        </mat-tab>
+                    </div>
+                </mat-tab-group>
+                <div *ngIf="qsm.tickedQuestions.length">
+                    <p style="margin-left: 15px;">{{text.questions_checked}}: {{ qsm.tickedQuestions.length }}</p>
+                    <button (click)="askTickedQuestions()"
+                            style="margin-left: 15px; margin-bottom: 15px">{{text.ask_questions_button}}</button>
+                </div>
+                <p style="margin-left: 15px; margin-top: 25px">{{text.click_the_reset_button}}</p>
+                <button (click)="openBeforeEndLectureDialog()"
+                        style="margin-left: 15px; margin-bottom: 15px; margin-top: 15px">{{text.end_lecture_button}}</button>
+            </mat-card>
+        </div>
+    </div>
+</div>

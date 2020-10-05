@@ -1,0 +1,18 @@
+<app-top-bar></app-top-bar>
+<div style="display: inline-block; width: 25vw; max-height: 50px; top: 10px; position: fixed; z-index: 16777271">
+    <!--Note: max z index in safari 3-->
+    <button style="height: 30px; top: 0; position:absolute; background-color:rgba(0, 0, 0, 0); color: rgba(33,33,33 ,1); z-index: 16777271"
+            (click)="openImpressum()"><i
+            class="material-icons">info</i>Impressum
+    </button>
+    <button style="height: 30px; top: 30px; position:absolute; background-color:rgba(0, 0, 0, 0); color: rgba(33,33,33 ,1); z-index: 16777271"
+            (click)="openDatenschutz()"><i class="material-icons">info</i>Datenschutz
+    </button>
+</div>
+
+<router-outlet></router-outlet>
+<!--
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

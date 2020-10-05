@@ -1,0 +1,13 @@
+<h1>{{text.qr_code}}</h1>
+<p>{{text.scan_qr_code}}</p>
+<mat-dialog-actions>
+
+    <zxing-scanner #scanner
+                   style=""
+                   (scanSuccess)="onSuccess($event)"
+    ></zxing-scanner>
+
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onCloseClick()">Ok</button>
+</mat-dialog-actions>
+

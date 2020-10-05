@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>{{text.edit_or_add_options}}</h1>
+<div mat-dialog-content style="overflow-y: hidden">
+    <div cdkDropList (cdkDropListDropped)="drop($event)">
+        <div class="table" style="max-height: 200px; overflow-y: scroll; overflow-x: hidden">
+            <div *ngFor="let option of data.question.textOptions" cdkDrag style="max-width: 85%">
+                <div class="row">
+                    <mat-card style="width: 85%">
+                        <div style="display: inline-block">{{ option.text }}</div>
+
+                        <div style="right: 10px; top:10px">
+                            <button (click)="editOption(option)">{{text.edit}}</button>
+                            <button (click)="deleteOption(option)">{{text.delete}}</button>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <mat-form-field>
+        <input matInput [(ngModel)]="currentTextOption" style="margin-top: 3px">
+    </mat-form-field>
+    <small style="margin-top: 3px; margin-bottom: 20px">{{currentTextOption.length}} {{text.out_of}} {{data.textOptionLengthLimit}}</small>
+
+    <button (click)="addOrSaveTextOption()" style="margin-left: 5px">{{addOrSave}}</button>
+    <mat-slide-toggle [(ngModel)]="this.data.question.multipleChoices">{{text.allow_selection_of_multiple_choices}}
+    </mat-slide-toggle>
+</div>
+<mat-dialog-actions>
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onOkClick()">{{text.ok}}</button>
+</mat-dialog-actions>

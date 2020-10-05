@@ -1,0 +1,38 @@
+<div mat-dialog-content>
+    <h1>{{text.chapter_select}}</h1>
+
+
+    <h2 mat-dialog-title>{{text.selected_questions}}</h2>
+    <div class="table" style="min-height: 0; height: 200px; overflow-y: scroll;">
+        <div class="columns" *ngFor="let pair of data.pairs">
+            <mat-card>
+                <mat-card-title>
+                    Title: {{pair.question.questionTitle }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                    Chapter: {{_data.chapters[pair.chapter].title}},
+                    Question: {{pair.question.questionText }}
+                </mat-card-subtitle>
+            </mat-card>
+        </div>
+    </div>
+    <p></p>
+    <h2 mat-dialog-title>{{text.choose_chapter_to_which_to_move}}</h2>
+    <div mat-dialog-content>
+        <div class="table" style="min-height: 0; height: 200px; overflow-y: scroll;">
+            <div class="columns" *ngFor="let chapter of data.chapters">
+                <mat-card>
+                    <div class="do-not-show-on-mobile">{{text.chapter}}:</div>
+                    {{chapter.title}}
+                    <button (click)="moveHere(chapter)"
+                            style="position: absolute; right: 10px; top: 10px">{{text.move_here_button}}</button>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <mat-dialog-actions>
+        <!--suppress HtmlUnknownAttribute -->
+        <button mat-button cdkFocusInitial (click)="onOkClick()">{{text.ok_button}}</button>
+    </mat-dialog-actions>
+</div>

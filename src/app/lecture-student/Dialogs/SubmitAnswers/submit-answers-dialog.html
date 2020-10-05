@@ -1,0 +1,7 @@
+<h1>{{text.submitting}}</h1>
+<p>{{text.by_pressing_ok}}</p>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancelClick()">{{text.cancel_button}}</button>
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onOkClick()">{{text.submit_button}}</button>
+</mat-dialog-actions>

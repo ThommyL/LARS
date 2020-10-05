@@ -1,0 +1,196 @@
+<div style="max-width: 1100px; margin: 150px auto auto; z-index: 16777269">
+    <h1 style="margin-top: 20px">{{text.creating_a_lecture}}</h1>
+    <mat-card>
+        <h2 style="margin-bottom: 20px">{{text.first_things_first}}</h2>
+        <mat-form-field>
+            <input matInput [placeholder]="text.lecture_title_placeholder"
+                   [(ngModel)]="lecture.lectureTitle">
+        </mat-form-field>
+        <small>{{lecture.lectureTitle.length}} {{text.out_of}} {{lectureTitleLengthLimit}}</small>
+    </mat-card>
+
+    <div *ngIf="lecture.lectureCode">
+        <mat-card>
+            <p>{{text.your_unique_lecture_code_is}}</p>
+            <b>{{text.warning}}</b>
+            <p>{{text.do_not_show_this_code}}</p>
+            <button (click)="openShowAccessCodeDialog()">{{text.show_access_code_button}}</button>
+            <p style="margin-top: 15px">{{text.please_note_this_code_down}}</p>
+        </mat-card>
+        <mat-card>
+            <p>{{text.the_unique_code_that_your_students_will_need}}</p>
+            <label>{{text.lecture_code}}</label>
+            <span>{{lecture.lectureCode}}</span>
+        </mat-card>
+        <mat-card>
+            <p>{{text.drag_and_drop}}</p>
+            <p>{{text.you_can_add_emojis}}</p>
+        </mat-card>
+    </div>
+
+
+    <mat-card>
+        <div *ngIf="!this.lecture.chapters.length">
+            <p>{{text.no_questions_so_far}}</p>
+        </div>
+
+        <div *ngIf="!questionCreation; else creation">
+            <button class="button" (click)="addQuestion()">{{text.add_question_button}}</button>
+        </div>
+
+        <div *ngIf="lecture.chapters.length === 0">
+            <p>{{text.you_can_change_the_order_of_questions}}</p>
+        </div>
+
+        <ng-template #creation>
+            <mat-slide-toggle [(ngModel)]="chooseOwnTitle">
+                {{text.choose_your_own_title_toggletext}}
+            </mat-slide-toggle>
+            <p></p>
+            <div *ngIf="chooseOwnTitle; else dontChooseOwnTitle">
+                <mat-form-field>
+                    <input matInput [placeholder]="text.title_placeholder" type="text"
+                           [(ngModel)]="currentQuestionTitle">
+                </mat-form-field>
+                <small>{{currentQuestionTitle.length}} {{text.out_of}} {{questionTitleLengthLimit}}</small>
+            </div>
+            <ng-template #dontChooseOwnTitle>
+                <p></p>
+                <span>{{text.question}} {{questionNumber}}</span>
+                <p></p>
+            </ng-template>
+
+            <div>
+                <mat-form-field>
+                    <input matInput [placeholder]="text.question_text_placeholder" type="text"
+                           [(ngModel)]="currentQuestionText">
+                </mat-form-field>
+                <small>{{currentQuestionText.length}} {{text.out_of}} {{textLengthLimit}}</small>
+            </div>
+
+            <mat-form-field>
+                <mat-select [placeholder]="text.question_type_placeholder" (selectionChange)="onSelect($event)">
+
+                    <mat-option style="max-block-size: 50px" *ngFor="let questionType of questionTypes"
+                                [value]="questionType">
+                        {{questionType}}
+                    </mat-option>
+
+                </mat-select>
+            </mat-form-field>
+
+            <p></p>
+            <div *ngIf="displayAnswerLengthLimit">
+                <mat-slider [(ngModel)]="currentAnswerLengthLimit"
+                            style="width: 70%;"
+                            [max]="500"
+                            [min]="0"
+                            [tickInterval]="100"
+                            [step]="50"
+                            [thumbLabel]="true"></mat-slider>
+                <p>{{text.limit_answer_length}}</p>
+            </div>
+            <button class="button" (click)="onSubmit()">{{text.add_question_button}}</button>
+
+
+        </ng-template>
+
+        <p></p>
+
+        <div *ngIf="lecture.chapters.length != 0">
+            <mat-tab-group (selectedTabChange)="onChangeTab($event)">
+                <div *ngFor="let chapter of lecture.chapters">
+                    <mat-tab [label]="chapter.title">
+                        <mat-accordion>
+                            <div cdkDropList (cdkDropListDropped)="drop($event)" class="drop-list">
+                                <div *ngFor="let question of chapter.questions" cdkDrag>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header style="min-height: 70px!important;">
+                                            <mat-panel-title class="question-title">
+                                                <mat-checkbox [(ngModel)]="question.isSelected"
+                                                              (change)="qsm.toggleQuestionSelection(question)"
+                                                              (click)="$event.stopPropagation();"
+                                                              style="padding-right: 8px">
+                                                </mat-checkbox>
+                                                {{question.questionTitle}}
+                                            </mat-panel-title>
+
+                                            <table style="width: 80%">
+                                                <tr>
+                                                    <div class="do-not-show-on-mobile">
+                                                        <td class="question-description-text">
+                                                            {{question.questionText}}
+                                                        </td>
+                                                    </div>
+
+                                                    <td class="question-description-type">
+                                                        {{questionTypes[question.questionType]}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </mat-expansion-panel-header>
+
+                                        <div class="do-not-show-on-pc">
+                                            <p>
+                                                {{question.questionText}}
+                                            </p>
+                                        </div>
+
+                                        <div style="display: block;">
+                                            <input [placeholder]="text.change_to_placeholder" type="text"
+                                                   [(ngModel)]="changeTo" style="display: block; margin-bottom: 3px">
+                                            <small style="margin-top: 3px; margin-bottom: 25px">{{changeTo.length}} {{text.out_of}} {{questionTitleLengthLimit}}
+                                                ({{text.question_title}}) / {{textLengthLimit}} ({{text.question_text}}
+                                                )</small>
+                                        </div>
+
+                                        <button (click)="changeTitle(question)">{{text.change_title}}</button>
+                                        <button (click)="changeText(question)">{{text.change_question}}</button>
+
+                                        <mat-form-field style="display:block; margin-top: 30px">
+                                            <mat-select [placeholder]="text.question_type_placeholder"
+                                                        (selectionChange)="onSelectChange($event, question)">
+
+                                                <mat-option *ngFor="let questionType of questionTypes"
+                                                            [value]="questionType">
+                                                    {{questionType}}
+                                                </mat-option>
+
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <p></p>
+                                        <div *ngIf="question.questionType === enumInstance.TextField">
+                                            <mat-slider
+                                                    [(ngModel)]="question.answerLengthLimit"
+                                                    [max]="500"
+                                                    [min]="0"
+                                                    [tickInterval]="100"
+                                                    [step]="50"
+                                                    [thumbLabel]="true"
+                                                    (mousedown)="$event.stopPropagation();">{{text.limit_answer_length}}</mat-slider>
+                                        </div>
+                                        <div *ngIf="question.textOptions && question.textOptions.length">
+                                            <button (click)="openTextOptionsDialog(question)">{{text.edit_textOptions_button}}</button>
+                                        </div>
+                                        <p></p>
+                                        <button (click)="deleteQuestion(question)">{{text.delete_question_button}}</button>
+                                        <p></p>
+                                    </mat-expansion-panel>
+                                </div>
+                            </div>
+                        </mat-accordion>
+                    </mat-tab>
+                </div>
+            </mat-tab-group>
+            <p></p>
+            <div *ngIf="qsm.tickedQuestions.length">
+                <p>{{text.questions_checked}}: {{ qsm.tickedQuestions.length }}</p>
+                <button (click)="moveToChapter()">{{text.move_to_chapter_button}}</button>
+            </div>
+            <p></p>
+            <button (click)="editChapters()" class="left-button">{{text.add_or_edit_chapters_button}}</button>
+            <button (click)="saveLecture()" class="middle-button">{{text.save_lecture_button}}</button>
+            <button (click)="deleteLecture()" class="right-button">{{text.delete_lecture_button}}</button>
+        </div>
+    </mat-card>
+</div>

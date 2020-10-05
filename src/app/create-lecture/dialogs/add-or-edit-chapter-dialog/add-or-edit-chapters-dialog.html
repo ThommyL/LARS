@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{text.add_or_edit_chapters}}</h1>
+<p>{{text.rearrange_them_via_drag_and_drop}}</p>
+<div mat-dialog-content>
+    <div cdkDropList (cdkDropListDropped)="drop($event)" style="max-width: 92%">
+        <div *ngFor="let chapter of data.lecture.chapters" cdkDrag>
+            <mat-card style="width: 92%">
+                <div class="do-not-show-on-mobile">{{text.chapter}}:</div>
+                <p class="on-mobile-display-block">{{ chapter.title }}</p>
+                <div class="do-not-show-on-mobile" style="position: absolute; right: 10px; top: 10px">
+                    <button (click)="editChapter(chapter)">{{text.edit_button}}</button>
+                    <button (click)="deleteChapter(chapter)">{{text.delete_button}}</button>
+                </div>
+                <div class="do-not-show-on-pc">
+                    <button (click)="editChapter(chapter)">{{text.edit_button}}</button>
+                    <button (click)="deleteChapter(chapter)">{{text.delete_button}}</button>
+                </div>
+            </mat-card>
+        </div>
+
+    </div>
+    <button (click)="addOrSaveChapter()"
+            style="margin-left: 5px; margin-right: 8px; margin-top: 15px;">{{addOrSave}}</button>
+    <mat-form-field style=" margin-top: 15px; margin-bottom: 3px">
+        <input matInput [(ngModel)]="currentChapterName" [placeholder]="text.chapter_name_placeholder">
+    </mat-form-field>
+    <p class="do-not-show-on-pc" style="max-height: 1px; padding-left: 70%; display: inline"></p><!--align for mobile-->
+    <small style="margin-top: 3px; margin-bottom: 20px">{{currentChapterName.length}} {{text.out_of}} {{data.chapterNameLimit}}</small>
+
+</div>
+<mat-dialog-actions>
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onOkClick()">{{text.ok_button}}</button>
+</mat-dialog-actions>

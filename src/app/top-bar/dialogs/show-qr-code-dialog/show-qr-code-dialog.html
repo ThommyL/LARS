@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{text.qr_code_title}}</h1>
+
+<div *ngIf="lectureService.qrCodeAvailable; else noQrCode">
+    <qr-code [value]="_lectureService.qrCodeUrl" [size]="150"></qr-code>
+    <h1 mat-dialog-title>{{text.the_lecture_code_is}}{{_lectureService.qrCodeUrl}}</h1>
+</div>
+
+<ng-template #noQrCode>
+    <p>{{text.no_qr_code_explanation}}</p>
+</ng-template>
+
+<mat-dialog-actions>
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onOkClick()">{{text.ok_button}}</button>
+</mat-dialog-actions>

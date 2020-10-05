@@ -1,0 +1,20 @@
+<h1>{{this.text.please_rate_understanding}}</h1>
+
+    <mat-card>
+        <h2>{{this.text.how_much_do_you_understand}}</h2>
+
+        <mat-slider
+                [max]="3"
+                [min]="-3"
+                [tickInterval]="3"
+                [step]="1"
+                [thumbLabel]="true"
+                [(ngModel)]="understanding">
+        </mat-slider>
+    </mat-card>
+
+<mat-dialog-actions>
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onCancelClick()">{{this.text.cancel_button}}</button>
+    <button mat-button (click)="onOkClick()">{{this.text.submit_button}}</button>
+</mat-dialog-actions>

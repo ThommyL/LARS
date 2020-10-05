@@ -1,0 +1,8 @@
+<h1>{{text.warning}}</h1>
+<p>{{text.do_you_really_want_to_end_lecture}}</p>
+
+<mat-dialog-actions style="display: inline; align-content: end">
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onCancelClick()">{{text.cancel_button}}</button>
+    <button mat-button (click)="endLecture()">{{text.end_lecture_button}}</button>
+</mat-dialog-actions>

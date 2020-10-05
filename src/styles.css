@@ -1,0 +1,289 @@
+/* Global Styles */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+/*Starting from prebuild theme*/
+@import '~bootstrap/dist/css/bootstrap.min.css'; /*for the graphs*/
+* {
+    font-family: 'Roboto', Arial, sans-serif;
+    color: #616161;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Text */
+
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+h1, h2 {
+    font-weight: lighter;
+}
+
+p {
+    font-size: 14px;
+}
+
+/* Hyperlink */
+
+a {
+    cursor: pointer;
+    color: rgba(0, 77, 64, 1);
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 0.8;
+}
+
+/* Input */
+
+input {
+    font-size: 14px;
+    border-radius: 2px;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #BDBDBD;
+}
+
+label {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    display: block;
+    text-transform: uppercase;
+}
+
+/* Button */
+.button, button {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 2px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: rgba(0, 77, 64, 1);
+    color: white;
+    border: none;
+}
+
+.button:hover, button:hover {
+    opacity: 0.8;
+    font-weight: normal;
+}
+
+.button:disabled, button:disabled {
+    opacity: 0.5;
+    cursor: auto;
+}
+
+/* Fancy Button */
+
+.fancy-button {
+    background-color: white;
+    color: rgba(0, 77, 64, 1);
+}
+
+.fancy-button i.material-icons {
+    color: white;
+    padding-right: 4px;
+    display: flex;
+    flex-direction: row;
+}
+
+app-top-bar h1 {
+    color: white;
+    margin: 0;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: white !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: white !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    color: black !important;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-ripple,
+.mat-form-field-appearance-legacy.mat-focused .mat-form-field-ripple {
+    background-color: rgba(27, 94, 32, 1) !important;
+}
+
+.mat-form-field-appearance-legacy.mat-focused .mat-form-field-label, .my-form-field.mat-form-field-appearance-legacy .mat-input-element {
+    color: rgba(27, 94, 32, 1) !important;
+    caret-color: rgba(27, 94, 32, 1) !important;
+}
+
+.mat-ink-bar {
+    background: rgba(27, 94, 32, 1) !important;
+}
+
+.mat-accent .mat-slider-thumb, .mat-accent .mat-slider-thumb-label, .mat-accent .mat-slider-track-fill {
+    background-color: rgba(27, 94, 32, 1);
+}
+
+.mat-slider {
+    background: rgba(215, 204, 200, 1);
+}
+
+mat-form-field {
+    width: 65%;
+}
+
+@media screen and (max-width: 1400px) {
+    .on-mobile-display-block {
+        display: block;
+    }
+
+    .custom.mat-card {
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+        background-color: rgba(215, 204, 200, 1);
+    }
+
+    .custom.mat-tab-group {
+        display: flex;
+        flex-direction: column;
+        max-width: 100vw !important;
+        left: 0 !important;
+        position: relative;
+    }
+
+
+    .custom.mat-tab-label-active {
+        min-width: 55vw !important;
+    }
+
+    .custom.mat-slider {
+        min-width: 100px;
+        width: 250px
+    }
+
+    .do-not-show-on-mobile {
+        display: none;
+    }
+
+    .question-description-type {
+        max-width: 28%;
+        text-align: right;
+        padding-right: 5px;
+        word-break: break-all;
+    }
+
+    .question-title {
+        min-width: 62%;
+        text-align: left;
+        word-break: break-all;
+    }
+
+    .lars-top-bar-title {
+        position: absolute;
+        padding-top: 10px;
+        padding-left: 43vw;
+        text-align: center;
+    }
+
+    /* Top Bar */
+    app-top-bar {
+        width: 100%;
+        height: 85px;
+        background-color: rgba(0, 77, 64, 1);
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        z-index: 16777270;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .on-mobile-display-block {
+        display: inline;
+    }
+
+    .custom.mat-card, .custom.mat-tab-group {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        max-width: 1100px;
+        left: -15px;
+        right: -15px;
+    }
+
+    .custom.mat-card {
+        background-color: rgba(215, 204, 200, 1);
+    }
+
+    .custom.mat-slider {
+        min-width: 500px
+    }
+
+    .custom.mat-slider {
+        min-width: 100px;
+        width: 500px
+    }
+
+    .do-not-show-on-pc {
+        display: none;
+    }
+
+    .question-description-text {
+        width: 780px;
+        flex-basis: 0;
+        text-align: left;
+    }
+
+    .question-description-type {
+        width: 100px;
+        flex-basis: 0;
+        text-align: right;
+        word-break: break-word;
+        padding-right: 10px;
+    }
+
+    .question-title {
+        width: 145px !important;
+        text-align: left;
+        flex-basis: 0;
+        word-break: break-word
+    }
+
+    .lars-top-bar-title {
+        position: absolute;
+        padding-top: 10px;
+        padding-left: 47vw;
+    }
+
+    /* Top Bar */
+    app-top-bar {
+        width: 100%;
+        height: 85px;
+        background-color: rgba(0, 77, 64, 1);
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+    }
+}
+
+
+/*
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+*/

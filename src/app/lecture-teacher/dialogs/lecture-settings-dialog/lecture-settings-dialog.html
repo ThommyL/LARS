@@ -1,0 +1,39 @@
+<h1>{{text.lecture_settings}}</h1>
+<mat-slide-toggle [(ngModel)]="data.lecture.settings.continuousRating"
+                  matTooltip="{{text.continuous_rating_button_tooltip}}">{{text.continuous_rating_button}}</mat-slide-toggle>
+<mat-slide-toggle [(ngModel)]="data.lecture.settings.enableTrigger"
+                  matTooltip="{{text.enable_trigger_tooltip}}">{{text.enable_trigger_button}}</mat-slide-toggle>
+<div *ngIf="data.lecture.settings.enableTrigger">
+    <p>{{text.trigger_light_negative_toggle}}</p>
+
+    <div class="custom" style="padding-bottom: 30px; text-align: center;">
+
+        <mat-slider [(ngModel)]="data.lecture.settings.triggerLightNegative"
+                    matTooltip="{{text.trigger_light_negative_toggle_tooltip}}"
+                    (valueChange)="adjustStrongTrigger()"
+                    class="custom"
+                    style="width: 200px"
+                    [max]="100"
+                    [min]="0"
+                    [tickInterval]="10"
+                    [step]="5"
+                    [thumbLabel]="true"></mat-slider>
+    </div>
+
+    <p>{{text.trigger_strong_negative_toggle}}</p>
+    <div class="custom" style="padding-bottom: 30px; text-align: center;">
+        <mat-slider [(ngModel)]="data.lecture.settings.triggerStrongNegative"
+                    matTooltip="{{text.trigger_strong_negative_toggle_tooltip}}"
+                    class="custom"
+                    style="width: 200px"
+                    [max]="100"
+                    [min]="0"
+                    [tickInterval]="10"
+                    [step]="5"
+                    [thumbLabel]="true"></mat-slider>
+    </div>
+</div>
+<mat-dialog-actions>
+    <!--suppress HtmlUnknownAttribute -->
+    <button mat-button cdkFocusInitial (click)="onCloseClick()">{{text.save}}</button>
+</mat-dialog-actions>

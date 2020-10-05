@@ -1,0 +1,188 @@
+<div *ngIf="!initializationDone">
+    Loading...
+</div>
+<div style="max-width: 1100px; margin: 100px auto auto;" *ngIf = "initializationDone">
+        <h1 style="padding-top: 20px; text-align: center;">{{text.welcome_to_the_lecture}}</h1>
+        <h1 style="padding-bottom: 20px; text-align: center;">'{{this.lecture.lectureTitle}}'</h1>
+    <mat-card>
+        <div style="text-align: center;" *ngIf="lecture.settings.continuousRating">
+            <div *ngIf="!understandingSubmitted">{{text.understanding_not_yet_submitted}}</div>
+            <div class="custom" style="padding-bottom: 30px">
+                <h2 style="padding-top: 20px;">{{text.how_much_do_you_understand}}</h2>
+
+                <mat-slider class="custom" (click)="underStandingSliderChange()" (change)="underStandingSliderChange()"
+                            [max]="3"
+                            [min]="-3"
+                            [tickInterval]="3"
+                            [step]="1"
+                            [thumbLabel]="true"
+                            [(ngModel)]="understanding">
+                </mat-slider>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <mat-card class="custom" style="width: 80%; margin: auto">
+                <div *ngIf="this.lecture.chapters.length > 1">
+                    <span>{{text.chapters_explanation}}</span>
+                </div>
+
+                <span>{{text.how_to_submit_answers}}</span>
+
+                <p>{{text.others_can_join_this_lecture_too_with_code}}: {{lecture.lectureCode}}</p>
+
+                <small>{{text.no_need_to_reload}}</small>
+            </mat-card>
+        </div>
+
+        <div *ngIf="noAskedQuestions" style="margin-top: 35px">{{text.no_asked_questions_yet}}</div>
+
+        <mat-tab-group class="custom" style="padding-top: 25px; max-width: 1065px"
+                       (selectedTabChange)="onChangeTab($event)">
+            <div *ngFor="let mapPair of answerMap">
+                <div *ngIf="mapPair.renderChapter">
+                    <mat-tab label={{mapPair.chapter.title}} class="custom">
+                        <mat-accordion>
+                            <div *ngFor="let questionAnswerMap of mapPair.questionTypeMap">
+                                <div *ngIf="questionAnswerMap.question.wasAsked && !questionAnswerMap.sentToServer">
+                                    <mat-card>
+                                        <h2 style="text-align: center">
+                                            {{questionAnswerMap.question.questionTitle}}
+                                        </h2>
+                                        <mat-label style="text-align: center;">
+                                            {{questionAnswerMap.question.questionText}}
+                                        </mat-label>
+
+
+                                        <!-- Insert corresponding template -->
+                                        <div class="questionTypes" style="margin-left: 25px; padding-top: 25px">
+                                            <div *ngIf="questionAnswerMap.question.questionType === enumInstance.Grades; then grades"></div>
+                                            <div *ngIf="questionAnswerMap.question.questionType === enumInstance.YesNo; then yesNo"></div>
+                                            <div *ngIf="questionAnswerMap.question.questionType === enumInstance.TextField; then textField"></div>
+                                            <div *ngIf="questionAnswerMap.question.questionType === enumInstance.Slider; then slider"></div>
+                                            <div *ngIf="questionAnswerMap.question.questionType === enumInstance.TextOptions; then textOptions"></div>
+                                            <div *ngIf="questionAnswerMap.question.questionType === enumInstance.ScaleOfHappiness; then scaleOfHappiness"></div>
+                                        </div>
+                                    </mat-card>
+                                </div>
+
+
+                                <ng-template #grades>
+                                    <small style="padding-bottom: -10px">{{text.school_grade_system}}</small>
+                                    <div *ngFor="let i of [0,1,2,3,4]">
+                                        <mat-checkbox
+                                                [(ngModel)]="questionAnswerMap.checkedAnswer[i]"
+                                                (change)="questionAnswerMap.setChecked(i)">
+                                            <b>{{i + 1}}</b>
+                                        </mat-checkbox>
+                                    </div>
+
+                                </ng-template>
+
+
+                                <ng-template #yesNo>
+                                    <div *ngFor="let i of [0,1]">
+                                        <mat-checkbox
+                                                [(ngModel)]="questionAnswerMap.checkedAnswer[i]"
+                                                (change)="questionAnswerMap.setChecked(i)">
+                                            <div *ngIf="i === 0">
+                                                <b>{{text.yes}}</b>
+                                            </div>
+                                            <div *ngIf="i === 1">
+                                                <b>{{text.no}}</b>
+                                            </div>
+                                        </mat-checkbox>
+                                    </div>
+                                </ng-template>
+
+
+                                <ng-template #textField>
+                                    <mat-form-field>
+                                        <input matInput [placeholder]="text.your_answer_placeholder" type="text"
+                                               [(ngModel)]="questionAnswerMap.answer">
+                                    </mat-form-field>
+
+                                    <div *ngIf="questionAnswerMap.answer != undefined">
+                                        <p>{{questionAnswerMap.answer.length}} {{text.out_of}} {{questionAnswerMap.question.answerLengthLimit}}</p>
+                                        <div *ngIf="questionAnswerMap.answer.length > questionAnswerMap.question.answerLengthLimit">
+                                            <mat-card style="background-color: rgba(255,167,38 ,1)">
+                                                <span> {{text.answer_is_too_long}}</span>
+                                            </mat-card>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+
+                                <ng-template #slider>
+                                    <div style="text-align: center;">
+                                        <div class="custom" style="padding-bottom: 30px">
+                                            <mat-slider class="custom"
+                                                        [max]="3"
+                                                        [min]="-3"
+                                                        [tickInterval]="3"
+                                                        [step]="1"
+                                                        [thumbLabel]="true"
+                                                        [(ngModel)]="questionAnswerMap.answer"
+                                                        (click)="questionAnswerMap.initIfNecessary()">
+                                            </mat-slider>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+
+                                <ng-template #textOptions>
+                                    <div *ngIf="questionAnswerMap.question.multipleChoices; else singleChoice">
+                                        <p>{{text.multiple_choice_question}}</p>
+                                    </div>
+                                    <ng-template #singleChoice>
+                                        <p>{{text.single_choice_question}}</p>
+                                    </ng-template>
+                                    <div *ngFor="let i of questionAnswerMap.getKeyArray()">
+                                        <mat-checkbox
+                                                [(ngModel)]="questionAnswerMap.checkedAnswer[i]"
+                                                (change)="questionAnswerMap.setChecked(i)">
+                                            <span>{{questionAnswerMap.question.textOptions[i].text}}</span>
+                                        </mat-checkbox>
+                                    </div>
+                                </ng-template>
+
+
+                                <ng-template #scaleOfHappiness>
+                                    <div *ngFor="let i of [0,1,2,3,4]">
+                                        <mat-checkbox
+                                                [(ngModel)]="questionAnswerMap.checkedAnswer[i]"
+                                                (change)="questionAnswerMap.setChecked(i)">
+                                            <div *ngIf="i === 0">
+                                                😃
+                                            </div>
+                                            <div *ngIf="i === 1">
+                                                🙂
+                                            </div>
+                                            <div *ngIf="i === 2">
+                                                😐
+                                            </div>
+                                            <div *ngIf="i === 3">
+                                                🙁
+                                            </div>
+                                            <div *ngIf="i === 4">
+                                                🤕
+                                            </div>
+                                        </mat-checkbox>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </mat-accordion>
+                    </mat-tab>
+                </div>
+            </div>
+        </mat-tab-group>
+
+
+        <div *ngIf="lectureService.answeredAvailable">
+            <mat-card class="custom">
+                <p> {{text.questions_answered}}: {{lectureService.answeredAvailable}}</p>
+                <button (click)="submitAnswers()">{{text.submit_answered_questions_button}}</button>
+            </mat-card>
+        </div>
+    </mat-card>
+</div>

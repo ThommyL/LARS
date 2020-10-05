@@ -1,0 +1,6 @@
+<h1>{{text.warning}}</h1>
+<p>{{text.deleting_chapter_will_also_delete_questions}}</p>
+<mat-dialog-actions>
+    <button mat-button cdkFocusInitial (click)="onCancelClick()">{{text.cancel_button}}</button>
+    <button mat-button (click)="deleteChapter()">{{text.ok_button}}</button>
+</mat-dialog-actions>

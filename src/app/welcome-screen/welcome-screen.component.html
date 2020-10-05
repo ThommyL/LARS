@@ -1,0 +1,36 @@
+<div style="max-width: 1100px; margin: auto; margin-top: 100px">
+    <h3 style="text-align: center">{{this.text.welcome_to_LARS}}</h3>
+
+    <mat-card>
+
+        <h2>{{this.text.you_can_join_by}}</h2>
+        <div style="display: inline">
+            <input type="text" [(ngModel)]="lectureCode">
+            <button class="button" (click)="onSubmit()">{{this.text.join_button}}</button>
+        </div>
+
+        <h2>{{this.text.or_by}}</h2>
+        <button class="button" (click)="openQrCodeScannerDialog()">{{this.text.scan_now_button}}</button>
+    </mat-card>
+
+    <h1 style="text-align: center">{{this.text.or}}</h1>
+
+    <mat-card>
+        <h2>{{this.text.create_edit_or_start}}</h2>
+
+        <button class="button" style="display: block; margin-bottom: 25px"
+                (click)="create()">{{this.text.create_lecture_button}}</button>
+
+        <input type="password" [(ngModel)]="startOrAccessCode">
+
+        <div style="display: inline; padding-bottom: 50px">
+            <button class="button" (click)="loadAndEdit()">{{this.text.edit_lecture_button}}</button>
+            <button class="button" (click)="loadAndStart()">{{this.text.start_button}}</button>
+        </div>
+    </mat-card>
+</div>
+<!-- 
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

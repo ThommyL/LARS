@@ -1,0 +1,13 @@
+<a [routerLink]="['/welcomeScreen/' + getStudentId() + '/' + this.languageService.getLanguageAsString()]">
+    <h1 class="lars-top-bar-title">LARS</h1>
+</a>
+
+
+<button style="display: compact; max-width: 30vw; position: absolute; right: 0; max-height: 30px; top: 10px; background-color:rgba(0, 0, 0, 0); color: rgba(33,33,33 ,1);"
+        (click)="openShowQrCodeDialog()"><i class="material-icons">camera</i>{{text.show_qr_code_button}}</button>
+
+<!-- 
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

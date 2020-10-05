@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>{{text.double_question_titles}}</h1>
+<p>{{text.question_titles_already_contained_in_target_chapter}}</p>
+<div mat-dialog-content style="overflow-y: hidden">
+    <div class="table" style="max-height: 200px; overflow-y: scroll; overflow-x: hidden">
+        <div *ngFor="let title of pairsToChange" style="max-width: 85%">
+            <div class="row">
+                <mat-card style="width: 85%">
+                    <div style="display: inline-block">{{ title }}</div>
+
+                    <div style="right: 10px; top:10px">
+                        <button (click)="editTitle(title)">{{text.edit}}</button>
+                        <button (click)="autoGenerateTitle(title)">{{text.generate_auto_title}}</button>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+    <mat-form-field>
+        <input matInput [(ngModel)]="currentQuestionTitle" style="margin-top: 3px">
+    </mat-form-field>
+    <small style="margin-top: 3px; margin-bottom: 20px">{{currentQuestionTitle.length}} {{text.out_of}} {{data.questionTitleLengthLimit}}</small>
+
+    <button (click)="saveOrNextQuestionTitle()" style="margin-left: 5px">{{saveOrNext}}</button>
+</div>
+
+<mat-dialog-actions>
+    <button mat-button (click)="onOkClick()">{{text.cancel}}</button>
+
+</mat-dialog-actions>
