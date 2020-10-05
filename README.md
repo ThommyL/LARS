@@ -7,6 +7,7 @@ For the implementation the framework Angular was used, as well as express.js amo
 ## Provided as is!
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+This project is hosted on Github solely for the purpose of presentation.
 
 ## Check out the Screenshots!
 
@@ -70,7 +71,11 @@ The software features some parameters meant to be adapted, which are labeled thr
 * __Thomas Lintner__
 
 
+## Update for 2020
 
+This was my very first web-app and in hindsight some things could have been implemented cleaner and considering that the app is all anonymous and without giving credentials, there are no security features built in.
+Because of licensing concerns one image and a reference to it was removed from the original thesis (alltough credit was given and fair use would have very likely applied, but one cannot be careful enough).
+Other than that and the changes in this readme file it is the same as the thesis that was handed in.
 
 
 ## Acknowledgments
